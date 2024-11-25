@@ -103,39 +103,38 @@ def update_varsion():
 
     # Crear o actualizar el archivo version_info.txt
     with open("src/version/version_info.txt", "w") as f:
-        f.write(f"""
-    VSVersionInfo(
-    ffi=FixedFileInfo(
-        filevers=({version.replace('.', '.')}, 0),
-        prodvers=({version.replace('.', '.')}, 0),
-        mask=0x3f,
-        flags=0x0,
-        OS=0x40004,
-        fileType=0x1,
-        subtype=0x0,
-        date=(0, 0)
-    ),
-    kids=[
-        StringFileInfo(
+        f.write(f"""VSVersionInfo(
+ffi=FixedFileInfo(
+    filevers=({version.replace('.', '.')}, 0),
+    prodvers=({version.replace('.', '.')}, 0),
+    mask=0x3f,
+    flags=0x0,
+    OS=0x40004,
+    fileType=0x1,
+    subtype=0x0,
+    date=(0, 0)
+),
+kids=[
+    StringFileInfo(
+    [
+        StringTable(
+        u'040904b0',
         [
-            StringTable(
-            u'040904b0',
-            [
-                StringStruct(u'CompanyName', u'{author}'),
-                StringStruct(u'FileDescription', u'{project_name} Tool'),
-                StringStruct(u'FileVersion', u'{version}'),
-                StringStruct(u'InternalName', u'{project_name}'),
-                StringStruct(u'OriginalFilename', u'MikroGuard.exe'),
-                StringStruct(u'ProductName', u'{project_name}'),
-                StringStruct(u'ProductVersion', u'{version}'),
-                StringStruct(u'SupportEmail', u'd3v.s0l15@gmail.com)
-            ]
-            )
+            StringStruct(u'CompanyName', u'{author}'),
+            StringStruct(u'FileDescription', u'{project_name} Tool'),
+            StringStruct(u'FileVersion', u'{version}'),
+            StringStruct(u'InternalName', u'{project_name}'),
+            StringStruct(u'OriginalFilename', u'MikroGuard.exe'),
+            StringStruct(u'ProductName', u'{project_name}'),
+            StringStruct(u'ProductVersion', u'{version}'),
+            StringStruct(u'SupportEmail', u'd3v.s0l15@gmail.com)
         ]
-        ),
-        VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+        )
     ]
-    )
+    ),
+    VarFileInfo([VarStruct(u'Translation', [1033, 1200])])
+]
+)
     """)
     print(f"Archivo version_info.txt actualizado a la versión {version}.")
 
