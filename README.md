@@ -1,9 +1,6 @@
-# package_name
+# MikroGuard
 
-Description. 
-The package package_name is used to:
-	- 
-	-
+Este proyecto automatiza tareas relacionadas con la asignación de subredes, la configuración de túneles WireGuard y la generación de scripts para MikroTik. 
 
 ## Installation
 
@@ -21,7 +18,7 @@ file1_name.my_function()
 ```
 
 ## Author
-My_name
+S0L15
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
