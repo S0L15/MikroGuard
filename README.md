@@ -1,6 +1,6 @@
 # MikroGuard
 
-MikroGuard is a powerful tool designed to assist network administrators in setting up and managing multiple WireGuard peers across different subnets. With its user-friendly interface and automated script generation, MikroGuard streamlines the process of network management, saving time and reducing complexity.
+MikroGuard is a lightweight tool designed to assist network administrators in setting up and managing multiple WireGuard peers across different subnets. With its user-friendly interface and automated script generation, MikroGuard streamlines the process of network management, saving time and reducing complexity.
 
 ---
 
@@ -34,7 +34,7 @@ MikroGuard is a powerful tool designed to assist network administrators in setti
      - Define the base network (e.g., `192.168.1.0/24`).
      - Set the network prefix (e.g., `/27`).
      - Specify the number of clients per group (e.g., `4`).
-     - Provide the path to the initial database containing the required columns: 
+     - Provide the path to the initial database in `.xlsx` format containing the required columns: 
        `["grupo", "subred", "cliente", "punto de venta", "nombre vpn", "ip", "clave publica", "clave privada"]`.
 
    - In the **WireGuard** tab:
