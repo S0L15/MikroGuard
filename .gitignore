@@ -4,7 +4,8 @@ __pycache__/
 *$py.class
 
 # Builder
-build.sh
+version_builder.py
+HOWTOBUILD.md
 
 # C extensions
 *.so
@@ -13,7 +14,6 @@ build.sh
 .Python
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
