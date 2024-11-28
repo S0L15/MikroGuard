@@ -14,6 +14,7 @@ HOWTOBUILD.md
 *.conf
 *.rsc
 red_mig.xlsx
+red_mig.csv
 
 # C extensions
 *.so
