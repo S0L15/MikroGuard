@@ -65,7 +65,7 @@ MikroGuard is a lightweight tool designed to assist network administrators in se
 1. Configure a base network, such as `192.168.1.0/24`.
 2. Set up `/27` as the network prefix.
 3. Assign `4` clients per group.
-4. Import the client data from an initial database (CSV or similar).
+4. Import the client data from an initial database (`.xlsx`).
 5. Add the MikroTik router's public key, endpoint, and port.
 6. Save configuration before running the scripts using the **Save Config** button.
 6. Generate and deploy the scripts using the **Run Scripts** feature.
