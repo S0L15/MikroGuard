@@ -7,6 +7,9 @@ __pycache__/
 version_builder.py
 HOWTOBUILD.md
 
+# VSCode
+.vscode/
+
 # C extensions
 *.so
 
