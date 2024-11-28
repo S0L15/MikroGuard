@@ -10,6 +10,11 @@ HOWTOBUILD.md
 # VSCode
 .vscode/
 
+# output
+*.conf
+*.rsc
+red_mig.xlsx
+
 # C extensions
 *.so
 

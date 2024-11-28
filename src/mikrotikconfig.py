@@ -16,14 +16,14 @@ makedirs(output_path, exist_ok=True)
 
 # Leer las subredes desde el archivo CSV
 subredes = []
-clientes = []
+razones_sociales = []
 nombresVpn = []
 ips = []
 clavesPublica = []
 
 # Conjunto para verificar duplicados
 subredes_set = set()
-clientes_set = set()
+razones_sociales_set = set()
 nombresVpn_set = set()
 ips_set = set()
 clavesPublica_set = set()
@@ -32,17 +32,17 @@ with open(input_csv, "r") as infile:
     reader = csv.DictReader(infile)
     for row in reader:
         subred = row.get("subred")
-        cliente = row.get("cliente")
-        nombreVpn = row.get("nombre vpn")
+        razon_social = row.get("razon_social")
+        nombreVpn = row.get("nombre_vpn")
         ip = row.get("ip")
-        clavePublica = row.get("clave publica")
+        clavePublica = row.get("clave_publica")
 
         if subred and subred not in subredes_set:  # Verifica si la subred ya fue agregada
             subredes.append(subred)
             subredes_set.add(subred)
-        if cliente and cliente not in clientes_set:  # Verifica si el cliente ya fue agregado
-            clientes.append(cliente)
-            clientes_set.add(cliente)
+        if razon_social and razon_social not in razones_sociales_set:  # Verifica si el razon_social ya fue agregado
+            razones_sociales.append(razon_social)
+            razones_sociales_set.add(razon_social)
         if nombreVpn and nombreVpn not in nombresVpn_set:  # Verifica si el nombreVpn ya fue agregado
             nombresVpn.append(nombreVpn)
             nombresVpn_set.add(nombreVpn)
@@ -55,7 +55,7 @@ with open(input_csv, "r") as infile:
 
 # Convertir las listas a cadenas separadas por espacios, con comillas y punto y coma al final de cada elemento
 subredes_str = "".join([f'"{subred}";\n' for subred in subredes])
-clientes_str = "".join([f'"{cliente}";\n' for cliente in clientes])
+razones_sociales_str = "".join([f'"{razon_social}";\n' for razon_social in razones_sociales])
 nombresVpn_str = "".join([f'"{nombreVpn}";\n' for nombreVpn in nombresVpn])
 ips_str = "".join([f'"{ip}";\n' for ip in ips])
 clavesPublica_str = "".join([f'"{clavePublica}";\n' for clavePublica in clavesPublica])
@@ -64,14 +64,14 @@ clavesPublica_str = "".join([f'"{clavePublica}";\n' for clavePublica in clavesPu
 script_lines_address = [
     "# Script generado para agregar subredes a MikroTik",
     ":local subredes {\n" + subredes_str[:-2] + "\n}\n",  # Lista de subredes con elementos separados por espacios y punto y coma
-    ":local clientes {\n" + clientes_str[:-2] + "\n}"   # Lista de clientes con elementos separados por espacios y punto y coma
+    ":local razones_sociales {\n" + razones_sociales_str[:-2] + "\n}"   # Lista de razones_sociales con elementos separados por espacios y punto y coma
 ]
 
 script_lines_address.append(""" 
 # Verificar si cada subred ya esta configurada y agregarla si es necesario
 :for i from=0 to=([ :len $subredes ] - 1) do={
     :local subred [:pick $subredes $i]
-    :local cliente [:pick $clientes $i]
+    :local razon_social [:pick $razones_sociales $i]
 
     # Verificar si la subred ya esta en la lista de direcciones
     :local encontrado false
@@ -83,8 +83,8 @@ script_lines_address.append("""
 
     # Si la subred no esta en la lista, agregarla
     :if ($encontrado = false) do={
-        /ip address add address=$subred interface=WGTEST comment="WG $cliente"
-        :log info ("Subred agregada: " . $subred . " con comentario: " . $cliente)
+        /ip address add address=$subred interface=WGTEST comment="WG $razon_social"
+        :log info ("Subred agregada: " . $subred . " con comentario: " . $razon_social)
     } else={
         :log info ("La subred ya existe: " . $subred)
     }

@@ -35,7 +35,6 @@ def load_config():
         config["netconfig"] = {
             "base_network": "192.168.1.0",
             "subnet_prefix": "24",
-            "clientes_por_grupo": "4",
             "database_path": "db/default.xlsx",
         }
         config["wireguard"] = {
@@ -55,7 +54,6 @@ def load_config():
         config.setdefault("output", {})
         config["netconfig"].setdefault("base_network", "192.168.1.0")
         config["netconfig"].setdefault("subnet_prefix", "24")
-        config["netconfig"].setdefault("clientes_por_grupo", "4")
         config["netconfig"].setdefault("database_path", "db/default.xlsx")
         config["wireguard"].setdefault("public_key_custom_text", "default_public_key")
         config["wireguard"].setdefault("endpoint_custom_text", "127.0.0.1:51820")
@@ -114,11 +112,6 @@ def main():
     subnet_prefix = tk.Entry(root, width=40)
     subnet_prefix.grid(row=2, column=1, pady=5)
     subnet_prefix.insert(0, config["netconfig"].get("subnet_prefix", "24"))
-    # Clients per group
-    tk.Label(root, text="Clients per group:").grid(row=3, column=0, sticky="e", padx=10)
-    clientes_por_grupo = tk.Entry(root, width=40)
-    clientes_por_grupo.grid(row=3, column=1, pady=5)
-    clientes_por_grupo.insert(0, config["netconfig"].get("clientes_por_grupo", "4"))
     # Database Route
     tk.Label(root, text="Database Path:").grid(row=4, column=0, sticky="e", padx=10)
 
@@ -180,7 +173,6 @@ def main():
         try:
             config["netconfig"]["base_network"] = base_network.get()
             config["netconfig"]["subnet_prefix"] = subnet_prefix.get()
-            config["netconfig"]["clientes_por_grupo"] = clientes_por_grupo.get()
             config["netconfig"]["database_path"] = database_entry.get()
             config["wireguard"]["public_key_custom_text"] = public_key.get()
             config["wireguard"]["endpoint_custom_text"] = endpoint.get()

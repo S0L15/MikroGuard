@@ -59,7 +59,7 @@ df = pd.read_excel(database_path)
 # Leer configuraciones existentes
 existing_configs = {}
 for index, row in df.iterrows():
-    nombre_vpn = row["nombre vpn"]
+    nombre_vpn = row["nombre_vpn"]
     if pd.notna(nombre_vpn):
         config_file = os.path.join(output_peers_directory, f"{nombre_vpn}.conf")
         if os.path.exists(config_file):
@@ -67,12 +67,12 @@ for index, row in df.iterrows():
 
 # Generar claves y configuraciones
 for index, row in df.iterrows():
-    nombre_vpn = row["nombre vpn"]
+    nombre_vpn = row["nombre_vpn"]
     subred = row["subred"]
     ip = row["ip"]
 
     # Generar claves privadas y públicas si no existen
-    if pd.isna(row["clave publica"]):
+    if pd.isna(row["clave_publica"]) and pd.notna(row["subred"]):
         if nombre_vpn in existing_configs:
             # Recuperar claves existentes
             private_key = existing_configs[nombre_vpn]["PrivateKey"]
@@ -82,15 +82,15 @@ for index, row in df.iterrows():
             private_key, public_key = generate_keys()
 
         # Actualizar la clave pública y privada en el DataFrame
-        df.at[index, "clave publica"] = public_key
-        df.at[index, "clave privada"] = private_key
+        df.at[index, "clave_publica"] = public_key
+        df.at[index, "clave_privada"] = private_key
     else:
         # Recuperar claves existentes (si no se generaron nuevas)
         if nombre_vpn in existing_configs:
             private_key = existing_configs[nombre_vpn]["PrivateKey"]
         else:
             private_key = "NO_PRIVATE_KEY"  # Placeholder para evitar errores
-        public_key = row["clave publica"]
+        public_key = row["clave_publica"]
 
     # Revisar si ya existe un archivo de configuración para el peer
     config_file = os.path.join(output_peers_directory, f"{nombre_vpn}.conf")
@@ -110,8 +110,8 @@ PersistentKeepalive = 30
         with open(config_file, "w") as outfile:
             outfile.write(peer_config)
 
-# Reordenar columnas y agregar clave privada como última columna
-df = df[["grupo", "subred", "cliente", "punto de venta", "nombre vpn", "ip", "clave publica", "clave privada"]]
+# Reordenar columnas y agregar clave_privada como última columna
+df = df[["grupo", "subred", "razon_social", "punto_de_venta", "nombre_vpn", "ip", "clave_publica", "clave_privada"]]
 
 # Guardar el DataFrame actualizado en el archivo CSV
 df.to_csv(output_csv, index=False)
@@ -124,12 +124,12 @@ worksheet = workbook.active
 header_map = {  # Mapeo de columnas para Excel
     "grupo": "A",
     "subred": "B",
-    "cliente": "C",
-    "punto de venta": "D",
-    "nombre vpn": "E",
+    "razon_social": "C",
+    "punto_de_venta": "D",
+    "nombre_vpn": "E",
     "ip": "F",
-    "clave publica": "G",
-    "clave privada": "H",  # Columna para la clave privada
+    "clave_publica": "G",
+    "clave_privada": "H",  # Columna para la clave_privada
 }
 
 # Escribir encabezados

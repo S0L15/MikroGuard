@@ -35,7 +35,7 @@ MikroGuard is a lightweight tool designed to assist network administrators in se
      - Set the network prefix (e.g., `/27`).
      - Specify the number of clients per group (e.g., `4`).
      - Provide the path to the initial database in `.xlsx` format containing the required columns: 
-       `["grupo", "subred", "cliente", "punto de venta", "nombre vpn", "ip", "clave publica", "clave privada"]`.
+       `["grupo", "subred", "razon_social", "punto_de_venta", "nombre_vpn", "ip", "clave_publica", "clave_privada"]`.
 
    - In the **WireGuard** tab:
      - Add the public key of the MikroTik router.
