@@ -4,11 +4,11 @@ from openpyxl import load_workbook
 import configparser
 import os
 
-# Cargar el archivo de configuración
+# Cargar el archivo de configuracion
 config = configparser.ConfigParser()
 config.read("src/config.ini")
 
-# Leer valores del archivo de configuración
+# Leer valores del archivo de configuracion
 base_network = ipaddress.IPv4Network(config["netconfig"].get("base_network")) # Rango base
 subnet_prefix = config["netconfig"].getint("subnet_prefix") # Tamaño de las subredes (cada razon_social tendrá una subred única)
 database_path = config["netconfig"].get("database_path")
@@ -20,7 +20,7 @@ os.makedirs(output_path, exist_ok=True)
 output_excel = os.path.join(output_path, os.path.basename(database_path))
 output_csv = os.path.join(output_path, os.path.basename(database_path).replace(".xlsx", ".csv"))
 
-# Función para generar nombres de VPN únicos en mayúsculas, reemplazando espacios por barra baja (_)
+# Funcion para generar nombres de VPN únicos en mayúsculas, reemplazando espacios por barra baja (_)
 def generate_vpn_name(punto_de_venta):
     if pd.isna(punto_de_venta) or not punto_de_venta.strip():  # Verificar si el nombre está vacío o es nulo
         return "VPN_DEFAULT"  # Nombre predeterminado si no hay punto_de_venta
@@ -41,7 +41,7 @@ def generate_vpn_name(punto_de_venta):
 try:
     df = pd.read_excel(database_path)
 except FileNotFoundError:
-    raise FileNotFoundError(f"No se encontró el archivo {database_path}. Asegúrate de crearlo primero.")
+    raise FileNotFoundError(f"No se encontro el archivo {database_path}. Asegúrate de crearlo primero.")
 
 # Lista de subredes ya asignadas por razon_social
 subnets_by_client = df.dropna(subset=["razon_social", "subred"]).set_index("razon_social")["subred"].to_dict()

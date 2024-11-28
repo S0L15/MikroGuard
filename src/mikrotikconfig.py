@@ -3,13 +3,15 @@ import configparser
 from wireguardconfig import output_csv
 from os import makedirs
 
-# Cargar el archivo de configuración
+# Cargar el archivo de configuracion
 config = configparser.ConfigParser()
 config.read("src/config.ini")
 
-# Leer valores del archivo de configuración
+# Leer valores del archivo de configuracion
 input_csv = output_csv
 output_path = config["output"].get("output_path") + "/mikrotik/"
+endpoint = config["wireguard"].get("endpoint_custom_text")
+port = config["wireguard"].get("port_custom_tet")
 
 # Crear los directorios de salida si no existen
 makedirs(output_path, exist_ok=True)
@@ -64,14 +66,14 @@ clavesPublica_str = "".join([f'"{clavePublica}";\n' for clavePublica in clavesPu
 script_lines_address = [
     "# Script generado para agregar subredes a MikroTik",
     ":local subredes {\n" + subredes_str[:-2] + "\n}\n",  # Lista de subredes con elementos separados por espacios y punto y coma
-    ":local razones_sociales {\n" + razones_sociales_str[:-2] + "\n}"   # Lista de razones_sociales con elementos separados por espacios y punto y coma
+    ":local clientes {\n" + razones_sociales_str[:-2] + "\n}"   # Lista de razones_sociales con elementos separados por espacios y punto y coma
 ]
 
 script_lines_address.append(""" 
 # Verificar si cada subred ya esta configurada y agregarla si es necesario
 :for i from=0 to=([ :len $subredes ] - 1) do={
     :local subred [:pick $subredes $i]
-    :local razon_social [:pick $razones_sociales $i]
+    :local cliente [:pick $clientes $i]
 
     # Verificar si la subred ya esta en la lista de direcciones
     :local encontrado false
@@ -83,8 +85,8 @@ script_lines_address.append("""
 
     # Si la subred no esta en la lista, agregarla
     :if ($encontrado = false) do={
-        /ip address add address=$subred interface=WGTEST comment="WG $razon_social"
-        :log info ("Subred agregada: " . $subred . " con comentario: " . $razon_social)
+        /ip address add address=$subred interface=WGTEST comment="WG $cliente"
+        :log info ("Subred agregada: " . $subred . " con comentario: " . $cliente)
     } else={
         :log info ("La subred ya existe: " . $subred)
     }
@@ -108,7 +110,7 @@ script_lines_peers.append("""
 
     # Verificar si el peer ya esta en la lista de direcciones
     :local encontrado false
-    :foreach direccion in=[/interface wireguard peers find] do={  # Verificación de peers de WireGuard
+    :foreach direccion in=[/interface wireguard peers find] do={  # Verificacion de peers de WireGuard
         :if ( [/interface wireguard peers get $direccion allowed-address] = $ipList ) do={
             :set encontrado true
         }

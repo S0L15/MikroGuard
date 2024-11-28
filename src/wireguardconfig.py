@@ -5,11 +5,11 @@ from openpyxl import load_workbook
 import csv
 import configparser
 
-# Cargar el archivo de configuración
+# Cargar el archivo de configuracion
 config = configparser.ConfigParser()
 config.read("src/config.ini")
 
-# Leer valores del archivo de configuración
+# Leer valores del archivo de configuracion
 database_path = config["netconfig"].get("database_path")
 output_path = config["output"].get("output_path")
 output_peers_directory = output_path + "/tunnels/" # Directorio para los archivos de los peers WireGuard
@@ -23,15 +23,15 @@ output_csv = os.path.splitext(database_path)[0] + ".csv" # Directorio para el ar
 # Crear los directorios de salida si no existen
 os.makedirs(output_peers_directory, exist_ok=True)
 
-# Función para generar claves privadas y públicas
+# Funcion para generar claves privadas y públicas
 def generate_keys():
     private_key = subprocess.check_output("wg genkey", shell=True).decode("utf-8").strip()
     public_key = subprocess.check_output(f"echo {private_key} | wg pubkey", shell=True).decode("utf-8").strip()
     return private_key, public_key
 
-# Función para leer un archivo .config
+# Funcion para leer un archivo .config
 def read_peer_config(file_path):
-    """Lee un archivo de configuración de WireGuard y devuelve sus parámetros clave."""
+    """Lee un archivo de configuracion de WireGuard y devuelve sus parámetros clave."""
     if not os.path.exists(file_path):
         return None
     
@@ -92,7 +92,7 @@ for index, row in df.iterrows():
             private_key = "NO_PRIVATE_KEY"  # Placeholder para evitar errores
         public_key = row["clave_publica"]
 
-    # Revisar si ya existe un archivo de configuración para el peer
+    # Revisar si ya existe un archivo de configuracion para el peer
     config_file = os.path.join(output_peers_directory, f"{nombre_vpn}.conf")
     if not os.path.exists(config_file):
         # Si no existe, crear el archivo .config

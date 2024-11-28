@@ -5,7 +5,7 @@ import os
 import subprocess
 import sys
 
-# Función para obtener la ruta correcta al archivo dentro del ejecutable
+# Funcion para obtener la ruta correcta al archivo dentro del ejecutable
 def get_file_path(filename):
     """Devuelve la ruta al archivo según si el programa está corriendo desde el ejecutable o desde el script fuente."""
     if getattr(sys, 'frozen', False):  # Si está corriendo como un ejecutable de PyInstaller
@@ -18,9 +18,9 @@ def get_file_path(filename):
     return os.path.join(base_path, filename)
 
 
-# Funciones para manejar configuración y ejecución
+# Funciones para manejar configuracion y ejecucion
 def load_config():
-    """Carga la configuración desde config.ini. Crea valores predeterminados si no existe."""
+    """Carga la configuracion desde config.ini. Crea valores predeterminados si no existe."""
     config = configparser.ConfigParser()
     config_path = get_file_path("config.ini")  # Usar get_file_path para obtener la ruta correcta
 
@@ -67,7 +67,7 @@ def load_config():
 
 
 def save_config(config):
-    """Guarda la configuración en config.ini."""
+    """Guarda la configuracion en config.ini."""
     config_path = get_file_path("config.ini")
     with open(config_path, "w") as configfile:
         config.write(configfile)
@@ -78,9 +78,9 @@ def run_scripts_in_order(scripts):
     for script in scripts:
         try:
             subprocess.run(["python", script], check=True)
-            messagebox.showinfo("Éxito", f"{script} se ejecutó correctamente.")
+            messagebox.showinfo("Éxito", f"{script} se ejecuto correctamente.")
         except FileNotFoundError:
-            messagebox.showerror("Error", f"El archivo {script} no se encontró.")
+            messagebox.showerror("Error", f"El archivo {script} no se encontro.")
             return False
         except subprocess.CalledProcessError as e:
             messagebox.showerror("Error", f"Hubo un error al ejecutar {script}.\n{e}")
@@ -98,7 +98,7 @@ def main():
     root.title(config["metadata"]["project_name"] + " version: " + config["metadata"]["version"])
     root.geometry("550x650")
 
-    # Sección de NetConfig
+    # Seccion de NetConfig
     tk.Label(root, text="NetConfig", font=("Arial", 12, "bold")).grid(
         row=0, column=0, columnspan=3, pady=(10, 5)
     )
@@ -129,7 +129,7 @@ def main():
         root, text="Explore", command=select_database_path, width=10
     ).grid(row=4, column=2, padx=5, pady=5)
 
-    # Sección de WireGuard
+    # Seccion de WireGuard
     tk.Label(root, text="WireGuard", font=("Arial", 12, "bold")).grid(
         row=5, column=0, columnspan=3, pady=(20, 5)
     )
@@ -169,7 +169,7 @@ def main():
     ).grid(row=10, column=2, padx=5, pady=5)
 
     def save_config_from_entries():
-        """Guarda la configuración ingresada por el usuario en config.ini."""
+        """Guarda la configuracion ingresada por el usuario en config.ini."""
         try:
             config["netconfig"]["base_network"] = base_network.get()
             config["netconfig"]["subnet_prefix"] = subnet_prefix.get()
@@ -179,17 +179,17 @@ def main():
             config["wireguard"]["port_custom_text"] = port.get()
             config["output"]["output_path"] = output_path_entry.get()
             save_config(config)
-            messagebox.showinfo("Configuración", "Configuración guardada correctamente.")
+            messagebox.showinfo("Configuracion", "Configuracion guardada correctamente.")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo guardar la configuración: {e}")
+            messagebox.showerror("Error", f"No se pudo guardar la configuracion: {e}")
 
-    # Botón para guardar la configuración
+    # Boton para guardar la configuracion
     save_button = tk.Button(
         root, text="Save Config", command=save_config_from_entries, width=20
     )
     save_button.grid(row=11, column=0, columnspan=3, pady=(20, 10))
 
-    # Botón para ejecutar scripts
+    # Boton para ejecutar scripts
     def run_scripts():
         scripts = [
             get_file_path("netconfig.py"),
