@@ -19,11 +19,12 @@ port_custom_text = config["wireguard"].get("port_custom_text")
 
 # Archivos de salida
 output_csv = os.path.splitext(database_path)[0] + ".csv" # Directorio para el archivo CSV
+output_connect_csv = os.path.splitext(database_path)[0] + "_rdc.csv"
 
 # Crear los directorios de salida si no existen
 os.makedirs(output_peers_directory, exist_ok=True)
 
-# Funcion para generar claves privadas y públicas
+# Funcion para generar claves privadas y publicas
 def generate_keys():
     private_key = subprocess.check_output("wg genkey", shell=True).decode("utf-8").strip()
     public_key = subprocess.check_output(f"echo {private_key} | wg pubkey", shell=True).decode("utf-8").strip()
@@ -31,7 +32,7 @@ def generate_keys():
 
 # Funcion para leer un archivo .config
 def read_peer_config(file_path):
-    """Lee un archivo de configuracion de WireGuard y devuelve sus parámetros clave."""
+    """Lee un archivo de configuracion de WireGuard y devuelve sus parametros clave."""
     if not os.path.exists(file_path):
         return None
     
@@ -71,7 +72,7 @@ for index, row in df.iterrows():
     subred = row["subred"]
     ip = row["ip"]
 
-    # Generar claves privadas y públicas si no existen
+    # Generar claves privadas y publicas si no existen
     if pd.isna(row["clave_publica"]) and pd.notna(row["subred"]):
         if nombre_vpn in existing_configs:
             # Recuperar claves existentes
@@ -81,7 +82,7 @@ for index, row in df.iterrows():
             # Generar nuevas claves
             private_key, public_key = generate_keys()
 
-        # Actualizar la clave pública y privada en el DataFrame
+        # Actualizar la clave publica y privada en el DataFrame
         df.at[index, "clave_publica"] = public_key
         df.at[index, "clave_privada"] = private_key
     else:
@@ -110,11 +111,13 @@ PersistentKeepalive = 30
         with open(config_file, "w") as outfile:
             outfile.write(peer_config)
 
-# Reordenar columnas y agregar clave_privada como última columna
+# Reordenar columnas y agregar clave_privada como ultima columna
 df = df[["grupo", "subred", "razon_social", "punto_de_venta", "nombre_vpn", "ip", "clave_publica", "clave_privada"]]
+dfconnect = df[["nombre_vpn", "ip", "grupo"]]
 
 # Guardar el DataFrame actualizado en el archivo CSV
 df.to_csv(output_csv, index=False)
+dfconnect.to_csv(output_connect_csv, index=False)
 
 # Actualizar el archivo Excel sin modificar el formato
 workbook = load_workbook(database_path)

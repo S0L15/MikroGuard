@@ -7,12 +7,12 @@ import sys
 
 # Funcion para obtener la ruta correcta al archivo dentro del ejecutable
 def get_file_path(filename):
-    """Devuelve la ruta al archivo según si el programa está corriendo desde el ejecutable o desde el script fuente."""
-    if getattr(sys, 'frozen', False):  # Si está corriendo como un ejecutable de PyInstaller
+    """Returns file path depending on if the program is running from the .exe or from the source script."""
+    if getattr(sys, 'frozen', False):  # Si esta corriendo como un ejecutable de PyInstaller
         # Si es un ejecutable, busca el archivo dentro de la carpeta temporal de PyInstaller
         base_path = sys._MEIPASS
     else:
-        # Si está corriendo como un script, busca los archivos en el directorio actual
+        # Si esta corriendo como un script, busca los archivos en el directorio actual
         base_path = os.path.dirname(os.path.abspath(__file__))
     
     return os.path.join(base_path, filename)
@@ -20,7 +20,7 @@ def get_file_path(filename):
 
 # Funciones para manejar configuracion y ejecucion
 def load_config():
-    """Carga la configuracion desde config.ini. Crea valores predeterminados si no existe."""
+    """Loads config from config.ini. Sets default values if they don't exist."""
     config = configparser.ConfigParser()
     config_path = get_file_path("config.ini")  # Usar get_file_path para obtener la ruta correcta
 
@@ -31,11 +31,13 @@ def load_config():
             "version = 1.0.0",
             "author = S0L15",
             "email = d3v.s0l15@gmail.com",
+            "icon_path = icon\MikroGuard_logo_1.png"
         }
         config["netconfig"] = {
             "base_network": "192.168.1.0",
             "subnet_prefix": "24",
             "database_path": "db/default.xlsx",
+            "default_group_size": "4"
         }
         config["wireguard"] = {
             "public_key_custom_text": "default_public_key",
@@ -55,6 +57,7 @@ def load_config():
         config["netconfig"].setdefault("base_network", "192.168.1.0")
         config["netconfig"].setdefault("subnet_prefix", "24")
         config["netconfig"].setdefault("database_path", "db/default.xlsx")
+        config["netconfig"].setdefault("default_group_size", "4")
         config["wireguard"].setdefault("public_key_custom_text", "default_public_key")
         config["wireguard"].setdefault("endpoint_custom_text", "127.0.0.1:51820")
         config["wireguard"].setdefault("port_custom_text", "51820")
@@ -63,38 +66,42 @@ def load_config():
         config["metadata"].setdefault("version", "1.0.0")
         config["metadata"].setdefault("author", "S0L15")
         config["metadata"].setdefault("contact_email", "d3v.s0l15@gmail.com")
+        config["metadata"].setdefault("icon_path", "icon\MikroGuard_logo_1.png")
     return config
 
 
 def save_config(config):
-    """Guarda la configuracion en config.ini."""
+    """Saves config on config.ini"""
     config_path = get_file_path("config.ini")
     with open(config_path, "w") as configfile:
         config.write(configfile)
 
 
 def run_scripts_in_order(scripts):
-    """Ejecuta una lista de scripts en orden. Si falla uno, se detiene."""
+    """Runs a list of scripts. If one fails it stops"""
     for script in scripts:
         try:
             subprocess.run(["python", script], check=True)
-            messagebox.showinfo("Éxito", f"{script} se ejecuto correctamente.")
+            messagebox.showinfo("Success", f"{script} executed successfully.")
         except FileNotFoundError:
-            messagebox.showerror("Error", f"El archivo {script} no se encontro.")
+            messagebox.showerror("Error", f"File {script} could not be found.")
             return False
         except subprocess.CalledProcessError as e:
-            messagebox.showerror("Error", f"Hubo un error al ejecutar {script}.\n{e}")
+            messagebox.showerror("Error", f"There was an error running {script}.\n{e}")
             return False
         except Exception as e:
-            messagebox.showerror("Error", f"Error inesperado al ejecutar {script}.\n{e}")
+            messagebox.showerror("Error", f"Unexpected error runnning {script}.\n{e}")
             return False
     return True
 
 # GUI principal
 def main():
     config = load_config()
+    icon_path = config["metadata"]["icon_path"]
 
     root = tk.Tk()
+    icon = tk.PhotoImage(file=icon_path)
+    root.iconphoto(False, icon)
     root.title(config["metadata"]["project_name"] + " version: " + config["metadata"]["version"])
     root.geometry("550x650")
 
@@ -112,18 +119,22 @@ def main():
     subnet_prefix = tk.Entry(root, width=40)
     subnet_prefix.grid(row=2, column=1, pady=5)
     subnet_prefix.insert(0, config["netconfig"].get("subnet_prefix", "24"))
+    # Group Size
+    tk.Label(root, text="Group Size:").grid(row=3, column=0, sticky="e", padx=10)
+    group_size = tk.Entry(root, width=40)
+    group_size.grid(row=3, column=1, pady=5)
+    group_size.insert(0, config["netconfig"].get("default_group_size", "4"))
     # Database Route
     tk.Label(root, text="Database Path:").grid(row=4, column=0, sticky="e", padx=10)
-
-    def select_database_path():
-        database = filedialog.askopenfilename(title="Seleccionar Archivo")
-        if database:
-            database_entry.delete(0, tk.END)
-            database_entry.insert(0, database)
-
     database_entry = tk.Entry(root, width=40)
     database_entry.grid(row=4, column=1, pady=5)
     database_entry.insert(0, config["netconfig"].get("database_path", ""))
+
+    def select_database_path():
+        database = filedialog.askopenfilename(title="Choose File")
+        if database:
+            database_entry.delete(0, tk.END)
+            database_entry.insert(0, database)
 
     tk.Button(
         root, text="Explore", command=select_database_path, width=10
@@ -169,7 +180,7 @@ def main():
     ).grid(row=10, column=2, padx=5, pady=5)
 
     def save_config_from_entries():
-        """Guarda la configuracion ingresada por el usuario en config.ini."""
+        """Saves config set by user on config.ini"""
         try:
             config["netconfig"]["base_network"] = base_network.get()
             config["netconfig"]["subnet_prefix"] = subnet_prefix.get()
@@ -179,9 +190,9 @@ def main():
             config["wireguard"]["port_custom_text"] = port.get()
             config["output"]["output_path"] = output_path_entry.get()
             save_config(config)
-            messagebox.showinfo("Configuracion", "Configuracion guardada correctamente.")
+            messagebox.showinfo("Configuracion", "Config saved successfully")
         except Exception as e:
-            messagebox.showerror("Error", f"No se pudo guardar la configuracion: {e}")
+            messagebox.showerror("Error", f"Config could not be saved: {e}")
 
     # Boton para guardar la configuracion
     save_button = tk.Button(
@@ -197,9 +208,9 @@ def main():
             get_file_path("mikrotikconfig.py")
         ]
         if run_scripts_in_order(scripts):
-            messagebox.showinfo("Éxito", "Todos los scripts se ejecutaron correctamente.")
+            messagebox.showinfo("Success", "Scripts executed successfully.")
         else:
-            messagebox.showerror("Error", "Hubo un error al ejecutar los scripts.")
+            messagebox.showerror("Error", "There was an error while running the scripts")
 
     run_button = tk.Button(
         root, text="Run Scripts", command=run_scripts, width=20

@@ -51,7 +51,7 @@ with open(input_csv, "r") as infile:
         if ip and ip not in ips_set:  # Verifica si la ip ya fue agregada
             ips.append(ip)
             ips_set.add(ip)
-        if clavePublica and clavePublica not in clavesPublica_set:  # Verifica si la clave pública ya fue agregada
+        if clavePublica and clavePublica not in clavesPublica_set:  # Verifica si la clave publica ya fue agregada
             clavesPublica.append(clavePublica)
             clavesPublica_set.add(clavePublica)
 

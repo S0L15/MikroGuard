@@ -6,11 +6,12 @@ __pycache__/
 # Builder
 version_builder.py
 HOWTOBUILD.md
+*.smm
 
 # VSCode
 .vscode/
 
-# output
+# Output
 *.conf
 *.rsc
 red_mig.xlsx

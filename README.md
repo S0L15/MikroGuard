@@ -9,8 +9,7 @@ MikroGuard is a lightweight tool designed to assist network administrators in se
 - **Automated WireGuard Peer Creation:** Simplify the configuration and deployment of multiple peers with ease.
 - **Customizable Network Settings:** Define subnet structures, network prefixes, and other parameters flexibly.
 - **Integration with Existing Databases:** Supports importing client data from predefined databases for seamless setup.
-- **Script Automation:** Automatically generate scripts for MikroTik routers and other configurations.
-- **Portable Execution:** No installation required—just run the executable.
+- **Script Automation:** Automatically generate scripts for MikroTik routers and RDCman.
 
 ---
 
@@ -19,15 +18,15 @@ MikroGuard is a lightweight tool designed to assist network administrators in se
 1. **Download the Executable:**
    - Visit the [Releases](https://github.com/S0L15/MikroGuard/releases) page on GitHub to download the latest version of MikroGuard.
 
-2. **Run as a Portable Application:**
-   - No installation process is needed. Simply double-click the `.exe` file to launch the program.
+2. **Run the Executable:**
+   - Program will guide you through the installation process.
 
 ---
 
 ## Usage
 
 1. **Launch the Application:**
-   - Run the downloaded `.exe` file.
+   - Run the file named `MikroGuard`.
 
 2. **Set Up Your Configuration:**
    - In the **NetConfig** tab:
@@ -76,7 +75,7 @@ MikroGuard is a lightweight tool designed to assist network administrators in se
 
 - **Cannot Run the Executable:**
   - Ensure you have sufficient permissions to execute `.exe` files on your system.
-  - Check your antivirus software—some may incorrectly flag the program.
+  - Check your antivirus software some may incorrectly flag the program.
 
 - **Configuration Errors:**
   - Double-check the settings entered in the **NetConfig** and **WireGuard** sections.
