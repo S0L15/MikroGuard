@@ -12,8 +12,8 @@ config.read("src/config.ini")
 base_network = ipaddress.IPv4Network(config["netconfig"].get("base_network"))  # Rango base
 subnet_prefix = config["netconfig"].getint("subnet_prefix")  # Tamaño de las subredes
 database_path = config["netconfig"].get("database_path")
+group_size = config["netconfig"].getint("default_group_size")  # Asegurarse que sea un entero
 output_path = config["output"].get("output_path") + "/db/"
-group_size = config["output"].getint("default_group_size")  # Asegurarse que sea un entero
 
 # Asegurarse de que la carpeta de salida exista
 os.makedirs(output_path, exist_ok=True)

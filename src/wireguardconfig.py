@@ -113,11 +113,11 @@ PersistentKeepalive = 30
 
 # Reordenar columnas y agregar clave_privada como ultima columna
 df = df[["grupo", "subred", "razon_social", "punto_de_venta", "nombre_vpn", "ip", "clave_publica", "clave_privada"]]
-dfconnect = df[["nombre_vpn", "ip", "grupo"]]
+dfconnect = df[["ip"]]
 
 # Guardar el DataFrame actualizado en el archivo CSV
 df.to_csv(output_csv, index=False)
-dfconnect.to_csv(output_connect_csv, index=False)
+dfconnect.to_csv(output_connect_csv, index=False, header=False)
 
 # Actualizar el archivo Excel sin modificar el formato
 workbook = load_workbook(database_path)
