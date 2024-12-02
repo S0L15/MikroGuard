@@ -11,7 +11,8 @@ config.read("src/config.ini")
 input_csv = output_csv
 output_path = config["output"].get("output_path") + "/mikrotik/"
 endpoint = config["wireguard"].get("endpoint_custom_text")
-port = config["wireguard"].get("port_custom_tet")
+port = config["wireguard"].get("port_custom_text")
+interface = config["netconfig"].get("interface")
 
 # Crear los directorios de salida si no existen
 makedirs(output_path, exist_ok=True)
@@ -85,7 +86,7 @@ script_lines_address.append("""
 
     # Si la subred no esta en la lista, agregarla
     :if ($encontrado = false) do={
-        /ip address add address=$subred interface=WGTEST comment="WG $cliente"
+        /ip address add address=$subred interface=""" + interface + """ comment="WG $cliente"
         :log info ("Subred agregada: " . $subred . " con comentario: " . $cliente)
     } else={
         :log info ("La subred ya existe: " . $subred)
@@ -118,7 +119,7 @@ script_lines_peers.append("""
 
     # Si el peer no esta en la lista, agregarlo
     :if ($encontrado = false) do={
-        /interface wireguard peers add name=$nombreVpn public-key=$clavePublica allowed-address=$ipList endpoint-address="179.50.75.210" endpoint-port=13231 interface=WG persistent-keepalive=30
+        /interface wireguard peers add name=$nombreVpn public-key=$clavePublica allowed-address=$ipList interface=""" + interface +""" persistent-keepalive=30
         :log info ("Peer agregado: " . $nombreVpn . " con ip: " . $ipList)
     } else={
         :log info ("El peer ya existe: " . $nombreVpn)

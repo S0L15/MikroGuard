@@ -37,7 +37,8 @@ def load_config():
             "base_network": "192.168.1.0",
             "subnet_prefix": "24",
             "database_path": "db/default.xlsx",
-            "default_group_size": "4"
+            "default_group_size": "4",
+            "interface": "WG"
         }
         config["wireguard"] = {
             "public_key_custom_text": "default_public_key",
@@ -58,11 +59,12 @@ def load_config():
         config["netconfig"].setdefault("subnet_prefix", "24")
         config["netconfig"].setdefault("database_path", "db/default.xlsx")
         config["netconfig"].setdefault("default_group_size", "4")
+        config["netconfig"].setdefault("interface", "WG")
         config["wireguard"].setdefault("public_key_custom_text", "default_public_key")
         config["wireguard"].setdefault("endpoint_custom_text", "127.0.0.1:51820")
         config["wireguard"].setdefault("port_custom_text", "51820")
         config["output"].setdefault("output_path", "output/")
-        config["metadata"].setdefault("poject_name", "MikroGuard")
+        config["metadata"].setdefault("project_name", "MikroGuard")
         config["metadata"].setdefault("version", "1.0.0")
         config["metadata"].setdefault("author", "S0L15")
         config["metadata"].setdefault("contact_email", "d3v.s0l15@gmail.com")
@@ -124,10 +126,15 @@ def main():
     group_size = tk.Entry(root, width=40)
     group_size.grid(row=3, column=1, pady=5)
     group_size.insert(0, config["netconfig"].get("default_group_size", "4"))
+    # Interface
+    tk.Label(root, text="MikroTik Interface:").grid(row=4, column=0, sticky="e", padx=10)
+    interface = tk.Entry(root, width=40)
+    interface.grid(row=4, column=1, pady=5)
+    interface.insert(0, config["netconfig"].get("interface", ""))
     # Database Route
-    tk.Label(root, text="Database Path:").grid(row=4, column=0, sticky="e", padx=10)
+    tk.Label(root, text="Database Path:").grid(row=5, column=0, sticky="e", padx=10)
     database_entry = tk.Entry(root, width=40)
-    database_entry.grid(row=4, column=1, pady=5)
+    database_entry.grid(row=5, column=1, pady=5)
     database_entry.insert(0, config["netconfig"].get("database_path", ""))
 
     def select_database_path():
@@ -138,32 +145,30 @@ def main():
 
     tk.Button(
         root, text="Explore", command=select_database_path, width=10
-    ).grid(row=4, column=2, padx=5, pady=5)
+    ).grid(row=5, column=2, padx=5, pady=5)
 
     # Seccion de WireGuard
     tk.Label(root, text="WireGuard", font=("Arial", 12, "bold")).grid(
-        row=5, column=0, columnspan=3, pady=(20, 5)
+        row=6, column=0, columnspan=3, pady=(20, 5)
     )
-    tk.Label(root, text="Router's Public Key:").grid(row=6, column=0, sticky="e", padx=10)
+    tk.Label(root, text="Router's Public Key:").grid(row=7, column=0, sticky="e", padx=10)
     public_key = tk.Entry(root, width=40)
-    public_key.grid(row=6, column=1, pady=5)
+    public_key.grid(row=7, column=1, pady=5)
     public_key.insert(
         0, config["wireguard"].get("public_key_custom_text", "default_public_key")
     )
-    tk.Label(root, text="Endpoint:").grid(row=7, column=0, sticky="e", padx=10)
+    tk.Label(root, text="Endpoint:").grid(row=8, column=0, sticky="e", padx=10)
     endpoint = tk.Entry(root, width=40)
-    endpoint.grid(row=7, column=1, pady=5)
+    endpoint.grid(row=8, column=1, pady=5)
     endpoint.insert(0, config["wireguard"].get("endpoint_custom_text", "127.0.0.1"))
-    tk.Label(root, text="Port:").grid(row=8, column=0, sticky="e", padx=10)
+    tk.Label(root, text="Port:").grid(row=9, column=0, sticky="e", padx=10)
     port = tk.Entry(root, width=40)
-    port.grid(row=8, column=1, pady=5)
+    port.grid(row=9, column=1, pady=5)
     port.insert(0, config["wireguard"].get("port_custom_text", "51820"))
 
     # Output Path
-    tk.Label(root, text="Output Path", font=("Arial", 12, "bold")).grid(
-        row=9, column=0, columnspan=3, pady=(20, 5)
-    )
-    tk.Label(root, text="Output path for files:").grid(row=10, column=0, sticky="e", padx=10)
+    tk.Label(root, text="Output Path", font=("Arial", 12, "bold")).grid(row=10, column=0, columnspan=3, pady=(20, 5))
+    tk.Label(root, text="Output path for files:").grid(row=11, column=0, sticky="e", padx=10)
 
     def select_output_path():
         output_path = filedialog.askdirectory(title="Select Folder")
@@ -172,12 +177,12 @@ def main():
             output_path_entry.insert(0, output_path)
 
     output_path_entry = tk.Entry(root, width=40)
-    output_path_entry.grid(row=10, column=1, pady=5)
+    output_path_entry.grid(row=11, column=1, pady=5)
     output_path_entry.insert(0, config["output"].get("output_path", "output/"))
 
     tk.Button(
         root, text="Explore", command=select_output_path, width=10
-    ).grid(row=10, column=2, padx=5, pady=5)
+    ).grid(row=11, column=2, padx=5, pady=5)
 
     def save_config_from_entries():
         """Saves config set by user on config.ini"""
@@ -198,7 +203,7 @@ def main():
     save_button = tk.Button(
         root, text="Save Config", command=save_config_from_entries, width=20
     )
-    save_button.grid(row=11, column=0, columnspan=3, pady=(20, 10))
+    save_button.grid(row=12, column=0, columnspan=3, pady=(20, 10))
 
     # Boton para ejecutar scripts
     def run_scripts():
@@ -215,7 +220,7 @@ def main():
     run_button = tk.Button(
         root, text="Run Scripts", command=run_scripts, width=20
     )
-    run_button.grid(row=12, column=0, columnspan=3, pady=(10, 20))
+    run_button.grid(row=13, column=0, columnspan=3, pady=(10, 20))
 
     root.mainloop()
 
