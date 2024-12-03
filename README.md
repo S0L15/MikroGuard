@@ -96,7 +96,7 @@ For additional support, contact the author or refer to the documentation.
 
 ## License
 
-This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/). You are free to modify and distribute it as per the license terms.
+This project is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/). You are free to modify and distribute it as per the license terms.
 
 ---
 
